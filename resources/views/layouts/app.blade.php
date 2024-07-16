@@ -65,7 +65,7 @@
                             <i class="fa fa-user"></i>
                         </span>
                         @endif
-                        
+
                         {{ Auth::user()->nom }}
                     </a>
                     @endguest
@@ -110,7 +110,7 @@
                         <a class="nav-link text-center"  href="{{route('home')}}" role="button">
                             {{__('Profile')}}
                         </a>
-                        
+
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-center"  href="{{route('demandes.index')}}" role="button">
@@ -122,7 +122,21 @@
                             {{__('Permission d\'absence')}}
                         </a>
                     </li>
-                    
+                    {{-- @if (Auth::user()->isRH())
+                    <li class="nav-item">
+                        <a class="nav-link text-center"  href="{{route('absence.declaration')}}" role="button">
+                            {{__('Declaration D\'Absence')}}
+                        </a>
+                    </li>
+                @endif --}}
+                {{-- @if (Auth::user()->isRH()) --}}
+                <li class="nav-item">
+                    <a class="nav-link text-center"  href="{{route('notedefrais.index')}}" role="button">
+                        {{__('NoteDeFrais')}}
+                    </a>
+                </li>
+            {{-- @endif --}}
+
                     @if (Auth::user()->isRH())
                         <li class="nav-item">
                             <a class="nav-link text-center"  href="{{route('annuaire.index')}}" role="button">
@@ -153,7 +167,7 @@
         <div id="dynamicErrorAlert" class="alert alert-SE alert-danger p-2" role="alert" style="display: none;">
             <i class="fas fa-exclamation-triangle me-2"></i>
             <span id="errorMessage">
-                @if ($errors->has('date_fin') || $errors->has('matricule') 
+                @if ($errors->has('date_fin') || $errors->has('matricule')
                 || $errors->has('error') || session('error'))
                     {{ implode('<br>', $errors->get('date_fin')) }}
                     {{ implode('<br>', $errors->get('matricule')) }}

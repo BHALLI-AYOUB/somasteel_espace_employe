@@ -12,7 +12,11 @@ use App\Http\Controllers\DemandesController;
 use App\Http\Controllers\DemandesCongeController;
 use App\Http\Controllers\AnnuaireController;
 use App\Http\Controllers\AbsenceController;
-
+use App\Http\Controllers\DeclarationAbsController;
+use App\Http\Middleware\isRespmd;
+use App\Http\Middleware\CheckAnyRole;
+use App\Http\Controllers\NotefraisController;
+use App\Http\Controllers\NoteDeFraisController;
 
 
 
@@ -54,6 +58,85 @@ Route::middleware('auth')->group(function () {
     Route::get('/Permissions_Absence', [AbsenceController::class, 'index'])->name('absence.index');
 
 
+    // Route::middleware([IsRhmd::class || isRespmd::class])->group(function () {
+    //     Route::get('/declarationabsence',[DeclarationAbsController::class,'index'])->name('absence.declaration');
+
+    // });
+    // Route::middleware([CheckAnyRole::class])->group(function () {
+    //     Route::get('/declarationabsence', [DeclarationAbsController::class, 'index'])->name('absence.declaration');
+
+    // });
+    // Route::middleware([CheckAnyRole::class])->group(function () {
+    //     Route::get('/notedefrais', [NotefraisController::class, 'index'])->name('notedefrais.index');
+    //     Route::post('/notedefrais', [NotefraisController::class, 'ajouter_note'])->name('notedefrais.ajouter');
+    // // });
+    // use App\Http\Controllers\NotefraisController;
+    // Route::middleware([CheckAnyRole::class])->group(function () {
+    Route::get('/notedefrais', [NotefraisController::class, 'index'])->name('notedefrais.index');
+    Route::post('/notedefrais', [NotefraisController::class, 'ajouter_note'])->name('notedefrais.ajouter');
+    Route::post('/notedefrais', [NotefraisController::class, 'store'])->name('notedefrais.store');
+
+    // Route::post('/notedefrais', [NotefraisController::class, 'store'])->name('notedefrais.store');
+    Route::post('/notedefrais/ajouter', [NotefraisController::class, 'store'])->name('notedefrais.ajouter');
+
+    // Route pour afficher le formulaire d'édition d'une note de frais spécifique
+    // Route::get('/notedefrais/{id}/edit', [NoteDeFraisController::class, 'edit'])->name('notedefrais.edit');
+    // Route::get('/notedefrais/{id}/edit', [NotefraisController::class, 'edit'])->name('notedefrais.edit');
+
+    // Route pour mettre à jour une note de frais spécifique
+    // Route::put('/notedefrais/{id}', [NotefraisController::class, 'update'])->name('notedefrais.update');
+
+    // Route pour supprimer une note de frais spécifique
+    // Route::delete('/notedefrais/{id}', [NoteDeFraisController::class, 'destroy'])->name('notedefrais.destroy');
+    Route::delete('/notedefrais/{id}', [NotefraisController::class, 'destroy'])->name('notedefrais.destroy');
+
+// });
+
+    // Route pour afficher la liste des notes de frais
+// web.php
+Route::get('/notedefrais/pdf', [NotefraisController::class, 'downloadPdf'])->name('notedefrais.pdf');
+
+
+
+    // Route pour afficher le formulaire de création d'une nouvelle note de frais
+    // Route::get('/notedefrais/create', [NoteDeFraisController::class, 'create'])->name('notedefrais.create');
+
+    // Route pour enregistrer une nouvelle note de frais
+    Route::post('/notedefrais', [NotefraisController::class, 'store'])->name('notedefrais.store');
+
+    // Route::post('/notedefrais', [NotefraisController::class, 'store'])->name('notedefrais.store');
+    Route::post('/notedefrais/ajouter', [NotefraisController::class, 'store'])->name('notedefrais.ajouter');
+
+    // Route pour afficher le formulaire d'édition d'une note de frais spécifique
+    // Route::get('/notedefrais/{id}/edit', [NoteDeFraisController::class, 'edit'])->name('notedefrais.edit');
+    // Route::get('/notedefrais/{id}/edit', [NotefraisController::class, 'edit'])->name('notedefrais.edit');
+
+    // Route pour mettre à jour une note de frais spécifique
+    // Route::put('/notedefrais/{id}', [NotefraisController::class, 'update'])->name('notedefrais.update');
+
+    // Route pour supprimer une note de frais spécifique
+    // Route::delete('/notedefrais/{id}', [NoteDeFraisController::class, 'destroy'])->name('notedefrais.destroy');
+    Route::delete('/notedefrais/{id}', [NotefraisController::class, 'destroy'])->name('notedefrais.destroy');
+
+// web.php
+// Route::put('/notedefrais/update/{id}', [NotefraisController::class, 'update'])->name('notedefrais.update');
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/notedefrais', [NotefraisController::class, 'index'])->name('notedefrais.index');
+    Route::post('/notedefrais', [NotefraisController::class, 'store'])->name('notedefrais.store');
+
+    Route::middleware(['isResp'])->group(function () {
+        Route::post('/notedefrais/{id}/validate', [NotefraisController::class, 'validateFrais'])->name('notedefrais.validate');
+    });
+
+    Route::middleware(['isRh'])->group(function () {
+        Route::post('/notedefrais/{id}/approve', [NotefraisController::class, 'approveFrais'])->name('notedefrais.approve');
+    });
+});
+
+
+// Route::put('/notedefrais/{id}', [NoteDeFraisController::class, 'update'])->name('notedefrais.update');
 
     //Annuaire routes
     Route::middleware(IsRHmd::class)->group(function () {
@@ -66,8 +149,8 @@ Route::middleware('auth')->group(function () {
         Route::put('/Annuaire/updatePass/{employee_id}', [AnnuaireController::class, 'changePassword'])->name('annuaire.employee.changePassword');
         Route::delete('/Annuaire/delete/{employee_id}', [AnnuaireController::class, 'destroyEmp'])->name('annuaire.employee.destroy');
         Route::post('/Annuaire/{depart}/register', [AnnuaireController::class, 'storeEmployee'])->name('annuaire.employee.register');
-        
-        
+
+
         //password
         //Route::get('/password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
         //Route::post('/password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
@@ -75,5 +158,3 @@ Route::middleware('auth')->group(function () {
         //Route::post('/password/reset', [ResetPasswordController::class, 'reset']);
     });
 });
-
-

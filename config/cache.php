@@ -45,11 +45,12 @@ return [
             'lock_connection' => env('DB_CACHE_LOCK_CONNECTION'),
         ],
 
-        'file' => [
-            'driver' => 'file',
-            'path' => storage_path('framework/cache/data'),
-            'lock_path' => storage_path('framework/cache/data'),
-        ],
+       'file' => [
+    'driver' => 'file',
+    'path' => storage_path('framework/cache/data'),
+    'lock_path' => storage_path('framework/cache/data'),
+],
+
 
         'memcached' => [
             'driver' => 'memcached',
