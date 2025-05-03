@@ -5,6 +5,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 
 use App\Http\Middleware\IsRHmd;
+use App\Http\Middleware\IsResponsable;
+use App\Http\Middleware\IsRhOrResp;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\HomeController;
@@ -28,6 +30,10 @@ Route::get('/', function () {
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+use App\Http\Controllers\AttendanceController;
+
+
+
 
 //I don't need registration
 // Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
@@ -36,6 +42,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 //somasteel Blog
 
 // Route::get('/SomaProduit', [BlogeController::class, 'produitIndex'])->name('bloge.produit');
+
 
 
 
@@ -139,6 +146,11 @@ Route::middleware(['auth'])->group(function () {
 // Route::put('/notedefrais/{id}', [NoteDeFraisController::class, 'update'])->name('notedefrais.update');
 
     //Annuaire routes
+    Route::middleware(IsRhOrResp::class)->group(function () {
+        Route::get('/AbsDeclaration', [AttendanceController::class, 'index'])->name('absenceDec.index');
+        Route::post('/AbsDeclaration/store', [AttendanceController::class, 'store'])->name('absenceDec.store');
+
+    });
     Route::middleware(IsRHmd::class)->group(function () {
         Route::get('/Annuaire', [AnnuaireController::class, 'index'])->name('annuaire.index');//done
         Route::get('/Annuaire/{depart}', [AnnuaireController::class, 'showDepartment'])->name('annuaire.depart');//done
@@ -158,3 +170,18 @@ Route::middleware(['auth'])->group(function () {
         //Route::post('/password/reset', [ResetPasswordController::class, 'reset']);
     });
 });
+
+Route::get('/', function () {
+    if (auth()->check()) {
+        return redirect('/home');
+    } else {
+        return view('auth.login');
+    }
+});
+
+// Auth::routes();
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+

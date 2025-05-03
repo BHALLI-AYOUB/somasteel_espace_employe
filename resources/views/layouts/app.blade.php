@@ -10,7 +10,7 @@
     {{-- <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
- --}}
+--}}
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -24,6 +24,7 @@
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
     <!-- Scripts -->
+    
     @vite(['resources/sass/app.scss', 'resources/css/app.css', 'resources/js/app.js', ])
     @stack('vite')
 </head>
@@ -144,6 +145,7 @@
                             </a>
                         </li>
                     @endif
+                    
                     <li class="nav-item">
                         <a id="logout-link" class="nav-link text-center text-danger" href="{{ route('logout') }}"
                             onclick="event.preventDefault();
